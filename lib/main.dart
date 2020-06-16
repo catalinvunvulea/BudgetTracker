@@ -40,7 +40,7 @@ class MyHomePage extends StatelessWidget {
           title: Text("Budget App"),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
@@ -49,6 +49,33 @@ class MyHomePage extends StatelessWidget {
                 color: Colors.blue,
                 child: Text("CHART!"),
                 elevation: 5,
+              ),
+            ),
+            Card(
+              elevation: 5,
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    TextField(
+                      decoration: InputDecoration(labelText: "Title..."),
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: "Value...",
+                        labelStyle: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    FlatButton(
+                      child: Text(
+                        "Add transaction",
+                      ),
+                      textColor: Colors.purpleAccent,
+                      onPressed: () {},
+                    )
+                  ],
+                ),
               ),
             ),
             Column(
@@ -87,7 +114,8 @@ class MyHomePage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          DateFormat("dd MMMM yyyy").format(transX.date),
+                          DateFormat("dd MMMM yyyy").format(transX
+                              .date), //format of date can be changed in many ways, add ".'" after DateFormat to access other options
                           style: TextStyle(
                             color: Colors.grey,
                           ),
