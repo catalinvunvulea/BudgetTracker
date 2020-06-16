@@ -6,7 +6,7 @@ class TransactionList extends StatelessWidget {
  // TransactionList({Key key}) : super(key: key);
 final List<Transcation> transactions;
  
- TransactionList(this.transactions)
+ TransactionList(this.transactions);
  
   @override
   Widget build(BuildContext context) {

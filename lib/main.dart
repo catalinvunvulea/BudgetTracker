@@ -1,4 +1,5 @@
 
+import './widgets/user_transactions.dart';
 import 'package:flutter/material.dart';
 
 
@@ -40,6 +41,7 @@ String amountInput;
                 elevation: 5,
               ),
             ),
+            UserTransactions()
           ],
         ));
   }
