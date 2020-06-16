@@ -1,6 +1,6 @@
+
 import 'package:flutter/material.dart';
-import './transaction.dart';
-import 'package:intl/intl.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -18,20 +18,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<Transcation> transactions = [
-    Transcation(
-      id: "t1",
-      title: "Shoes",
-      amount: 39.19,
-      date: DateTime.now(),
-    ),
-    Transcation(
-      id: "t2",
-      title: "Weekly shopping",
-      amount: 99.69,
-      date: DateTime.now(),
-    )
-  ]; //this constant will hold a list of type Transaction
 
 String titleInput;
 String amountInput; 
@@ -54,89 +40,6 @@ String amountInput;
                 elevation: 5,
               ),
             ),
-            Card(
-              elevation: 5,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(labelText: "Title..."),
-                      onChanged: (textAdded) { //textAdded = text added in the text field
-                        titleInput = textAdded;
-                      },
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: "Value...",
-                        labelStyle: TextStyle(color: Colors.grey),
-                      ),
-                      onChanged: (valueAdded) {
-                        amountInput = valueAdded;
-                      },
-                    ),
-                    FlatButton(
-                      child: Text(
-                        "Add transaction",
-                      ),
-                      textColor: Colors.purpleAccent,
-                      onPressed: () {
-                        
-                      },
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Column(
-                children: transactions.map((transX) {
-              return Card(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.purple,
-                          width: 2,
-                        ),
-                      ),
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        "£ ${transX.amount}", //string interpolation
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purple),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          transX.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Text(
-                          DateFormat("dd MMMM yyyy").format(transX
-                              .date), //format of date can be changed in many ways, add ".'" after DateFormat to access other options
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        )
-                      ],
-                    ) //we convert the double to tex using toString
-                  ],
-                ),
-              );
-            }).toList()),
           ],
         ));
   }
