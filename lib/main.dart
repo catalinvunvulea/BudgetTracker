@@ -33,6 +33,9 @@ class MyHomePage extends StatelessWidget {
     )
   ]; //this constant will hold a list of type Transaction
 
+String titleInput;
+String amountInput; 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,19 +63,27 @@ class MyHomePage extends StatelessWidget {
                   children: <Widget>[
                     TextField(
                       decoration: InputDecoration(labelText: "Title..."),
+                      onChanged: (textAdded) { //textAdded = text added in the text field
+                        titleInput = textAdded;
+                      },
                     ),
                     TextField(
                       decoration: InputDecoration(
                         labelText: "Value...",
                         labelStyle: TextStyle(color: Colors.grey),
                       ),
+                      onChanged: (valueAdded) {
+                        amountInput = valueAdded;
+                      },
                     ),
                     FlatButton(
                       child: Text(
                         "Add transaction",
                       ),
                       textColor: Colors.purpleAccent,
-                      onPressed: () {},
+                      onPressed: () {
+                        
+                      },
                     )
                   ],
                 ),
