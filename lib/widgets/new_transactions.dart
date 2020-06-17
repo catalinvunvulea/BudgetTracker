@@ -23,10 +23,12 @@ class _NewTransactionState extends State<NewTransaction> {
 if (enteredTitle.isEmpty || enteredAmount <= 0) {
   return; //if the condition is meet, the code won't continue to the folowing lines (ex addTransaction)
 }
-    widget.addTransaction(
+    widget.addTransaction( //widget is used in the state class to access the widget class 
       tilteController.text,
       double.parse(amountContorller.text),
     );
+
+    Navigator.of(context).pop(); //close the popup
   }
 
   @override
@@ -64,7 +66,7 @@ if (enteredTitle.isEmpty || enteredAmount <= 0) {
               child: Text(
                 "Add transaction",
               ),
-              textColor: Colors.purpleAccent,
+              textColor: Theme.of(context).primaryColor,
               onPressed: submitData,
             )
           ],
