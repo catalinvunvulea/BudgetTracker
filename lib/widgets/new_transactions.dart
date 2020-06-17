@@ -35,7 +35,7 @@ if (enteredTitle.isEmpty || enteredAmount <= 0) {
               decoration: InputDecoration(labelText: "Title..."),
               controller: tilteController,
               onSubmitted: (_) =>
-                  submitData(), //on submited we need to pass a function with string parameter, hence we use (_)
+                  submitData(), //on submited=when ok from keyboard is pressed; we need to pass a function with string parameter, hence we use (_)
               // onChanged: (textAdded) {
               //textAdded = text added in the text field
               //  tilteController.text = textAdded;
