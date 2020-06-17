@@ -12,7 +12,7 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      child: ListView.builder(
+      child: ListView.builder( //used for long lists (or if no of rows/columns is unknown; always has to have itemBuilder - elemtns included, and itemCount = number of rows/columns)
         itemBuilder: (ctx, index) {
           return Card(
             child: Row(
@@ -30,7 +30,7 @@ class TransactionList extends StatelessWidget {
                   ),
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "£ ${transactions[index].amount}", //string interpolation ${}
+                    "£ ${transactions[index].amount.toStringAsFixed(2)}", //string interpolation ${} / toStringAsFixed(2) = shows exactly 2 decimals after .
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
