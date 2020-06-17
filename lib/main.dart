@@ -15,9 +15,25 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.purple, //used to set a theme color that can be used throughout the App
-        accentColor: Colors.amberAccent
-      ),
+          primarySwatch: Colors
+              .purple, //used to set a theme color that can be used throughout the App
+          accentColor: Colors.amberAccent,
+          fontFamily: 'Quicksand',
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline6: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+          appBarTheme: AppBarTheme(
+              textTheme: ThemeData.light().textTheme.copyWith(
+                    headline6: TextStyle(
+                      //title was replaced by headline6
+                      fontFamily: 'OpenSans',
+                      fontSize: 22,
+                    ),
+                  ))),
       home: MyHomePage(),
     );
   }
@@ -29,7 +45,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final List<Transaction> _userTransactions = [
     Transaction(
       id: "t1",
@@ -57,12 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  
-
-  void _startAddNewTransaction (BuildContext ctx) {
-    showModalBottomSheet(context: ctx, builder: (_) {
-      return NewTransaction(_addNewTransaction);
-    });
+  void _startAddNewTransaction(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (_) {
+          return NewTransaction(_addNewTransaction);
+        });
   }
 
   @override
@@ -70,7 +85,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("My Budget"),
+        title: Text(
+          "My Budget",
+          style: TextStyle(
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
@@ -90,9 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
               elevation: 5,
             ),
           ),
-           TransactionList(
-          _userTransactions,
-        ),
+          TransactionList(
+            _userTransactions,
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
