@@ -42,7 +42,7 @@ class NewTransaction extends StatelessWidget {
               onPressed: () {
                 addTransaction(
                   tilteController.text,
-                  double.parse(amountContorller.text), //double.pars used to convert string to double
+                  double.parse(amountContorller.text),
                 );
               },
             )
