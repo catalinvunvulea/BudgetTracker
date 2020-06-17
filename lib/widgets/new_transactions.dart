@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
-class NewTransaction extends StatelessWidget {
+class NewTransaction extends StatefulWidget {
   // const NewTransaction({Key key}) : super(key: key);
 
   final Function addTransaction;
-  final tilteController = TextEditingController();
-  final amountContorller = TextEditingController();
 
   NewTransaction(this.addTransaction);
+
+  @override
+  _NewTransactionState createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+  final tilteController = TextEditingController();
+
+  final amountContorller = TextEditingController();
 
   void submitData() {
     final enteredTitle = tilteController.text;
@@ -16,7 +23,7 @@ class NewTransaction extends StatelessWidget {
 if (enteredTitle.isEmpty || enteredAmount <= 0) {
   return; //if the condition is meet, the code won't continue to the folowing lines (ex addTransaction)
 }
-    addTransaction(
+    widget.addTransaction(
       tilteController.text,
       double.parse(amountContorller.text),
     );
