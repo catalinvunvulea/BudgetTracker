@@ -30,8 +30,7 @@ String amountInput;
           centerTitle: true,
           title: Text("My Budget"),
         ),
-        body: SingleChildScrollView(
-                  child: Column(
+        body: Column(
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -46,6 +45,6 @@ String amountInput;
               UserTransactions()
             ],
           ),
-        ));
+        );
   }
 }
