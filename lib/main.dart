@@ -1,8 +1,10 @@
+import 'package:BudgetTracker/widgets/chart.dart';
 import 'package:flutter/material.dart';
 
 import './widgets/new_transactions.dart';
 import './Models/transaction.dart';
 import './widgets/transaction_list.dart';
+import './widgets/chart.dart';
 
 void main() {
   runApp(MyApp());
@@ -60,6 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
     // )
   ];
 
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((element) { //.where can be used to lists(arrays) to return only the elemnts which we want; just like  for in loop
+      return element.date.isAfter(DateTime.now().subtract(Duration(days: 7))); //isAfter can be added to dates, and return only the dates after the date we give, and we substract 7 days from now
+    }).toList(); //where return an Iterable and we expect a list, hence we convert it
+  }
+
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTrans = Transaction(
       title: txTitle,
@@ -103,14 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Card(
-              color: Colors.blue,
-              child: Text("CHART!"),
-              elevation: 5,
-            ),
-          ),
+          Chart(_recentTransactions ),
           TransactionList(
             _userTransactions,
           ),
