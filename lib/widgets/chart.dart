@@ -1,3 +1,4 @@
+import './chart_bar.dart';
 import 'package:flutter/material.dart';
 import '../Models/transaction.dart';
 import 'package:intl/intl.dart';
@@ -24,21 +25,31 @@ class Chart extends StatelessWidget {
           totalSum += recentTransactions[i].amount;
         }
       }
-
-      return {'day': DateFormat.E().format(weekDay).substring(0, 1), 'amount': totalSum}; //.substring(element to start counting, how many digits to count and show)
+      return {
+        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'amount': totalSum
+      }; //.substring(element to start counting, how many digits to count and show)
     }); //generate = generate new list where we define a lenght (7 columns), each element has an index
+  }
+
+  double get totalSpending {
+    return groupedTransactionValues.fold(0.0, (sum, item) {
+      //fold alows us to change a list to a different type with a logig defined by us
+      return sum + item['amount'];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(groupedTransactionValues);
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(15),
       child: Row(
         children: groupedTransactionValues.map((data) {
-          return Text(
-            "${data["day"]}: ${data["amount"]}",
+          return ChartBar(
+            data['day'],
+            data['amount'],
+            totalSpending == 0 ? 0.0 : (data['amount'] as double) / totalSpending,
           );
         }).toList(),
       ),
