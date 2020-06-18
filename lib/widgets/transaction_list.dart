@@ -47,12 +47,14 @@ class TransactionList extends StatelessWidget {
                           ),
                         ),
                         padding: EdgeInsets.all(10),
-                        child: Text(
-                          "£ ${transactions[index].amount.toStringAsFixed(2)}", //string interpolation ${} / toStringAsFixed(2) = shows exactly 2 decimals after .
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.purple),
+                        child: FittedBox(
+                          child: Text(
+                            "£ ${transactions[index].amount.toStringAsFixed(2)}", //string interpolation ${} / toStringAsFixed(2) = shows exactly 2 decimals after .
+                            style: TextStyle(
+                               // fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple),
+                          ),
                         ),
                       ),
                       Column(

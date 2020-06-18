@@ -11,8 +11,10 @@ class ChartBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(
-            "£ ${spendingAmount.toStringAsFixed(0)}"), //toStringAsFixed(0) to avoid showing decimals
+        FittedBox(
+                  child: Text(
+              "£ ${spendingAmount.toStringAsFixed(0)}"),
+        ), //toStringAsFixed(0) to avoid showing decimals
         SizedBox(height: 4),
         Container(
           height: 60,
