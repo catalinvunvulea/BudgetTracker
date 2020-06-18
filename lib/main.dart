@@ -17,25 +17,35 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-          primarySwatch: Colors
-              .purple, //used to set a theme color that can be used throughout the App
-          accentColor: Colors.amberAccent, //showing to some of the widgets
-          fontFamily: 'Quicksand',
+        primarySwatch: Colors
+            .purple, //used to set a theme color that can be used throughout the App
+        accentColor: Colors.amberAccent, //showing to some of the widgets
+        fontFamily: 'Quicksand',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                //headline6 = title
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+              button: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+        appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
-                headline6: TextStyle( //headline6 = title
+                headline6: TextStyle(
+                  //title was replaced by headline6
                   fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 22,
+                ),
+                button: TextStyle(
+                  color: Colors.white,
                 ),
               ),
-          appBarTheme: AppBarTheme(
-              textTheme: ThemeData.light().textTheme.copyWith(
-                    headline6: TextStyle(
-                      //title was replaced by headline6
-                      fontFamily: 'OpenSans',
-                      fontSize: 22,
-                    ),
-                  ))),
+        ),
+      ),
       home: MyHomePage(),
     );
   }
@@ -63,8 +73,11 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   List<Transaction> get _recentTransactions {
-    return _userTransactions.where((element) { //.where can be used to lists(arrays) to return only the elemnts which we want; just like  for in loop
-      return element.date.isAfter(DateTime.now().subtract(Duration(days: 7))); //isAfter can be added to dates, and return only the dates after the date we give, and we substract 7 days from now
+    return _userTransactions.where((element) {
+      //.where can be used to lists(arrays) to return only the elemnts which we want; just like  for in loop
+      return element.date.isAfter(DateTime.now().subtract(Duration(
+          days:
+              7))); //isAfter can be added to dates, and return only the dates after the date we give, and we substract 7 days from now
     }).toList(); //where return an Iterable and we expect a list, hence we convert it
   }
 
@@ -73,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       title: txTitle,
       amount: txAmount,
       date: DateTime.now(),
-      id: DateTime.now().toString()+txTitle.toString(),
+      id: DateTime.now().toString() + txTitle.toString(),
     );
     setState(() {
       _userTransactions.add(newTrans);
@@ -111,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Chart(_recentTransactions ),
+          Chart(_recentTransactions),
           TransactionList(
             _userTransactions,
           ),

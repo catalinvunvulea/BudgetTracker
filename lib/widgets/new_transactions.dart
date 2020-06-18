@@ -20,10 +20,11 @@ class _NewTransactionState extends State<NewTransaction> {
     final enteredTitle = tilteController.text;
     final enteredAmount = double.parse(amountContorller.text);
 
-if (enteredTitle.isEmpty || enteredAmount <= 0) {
-  return; //if the condition is meet, the code won't continue to the folowing lines (ex addTransaction)
-}
-    widget.addTransaction( //widget is used in the state class to access the widget class 
+    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+      return; //if the condition is meet, the code won't continue to the folowing lines (ex addTransaction)
+    }
+    widget.addTransaction(
+      //widget is used in the state class to access the widget class
       tilteController.text,
       double.parse(amountContorller.text),
     );
@@ -62,13 +63,30 @@ if (enteredTitle.isEmpty || enteredAmount <= 0) {
                       true), //TextInput.number would probably work only for Android
               onSubmitted: (_) => submitData(),
             ),
-            FlatButton(
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Text("No date chosen"),
+                  FlatButton(
+                    child: Text(
+                      "Chose date",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: () {},
+                  )
+                ],
+              ),
+            ),
+            RaisedButton(
               child: Text(
                 "Add transaction",
               ),
-              textColor: Theme.of(context).primaryColor,
+              color: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).textTheme.button.color,
               onPressed: submitData,
-            )
+            ),
           ],
         ),
       ),
