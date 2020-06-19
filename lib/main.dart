@@ -1,5 +1,6 @@
 import 'package:BudgetTracker/widgets/chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import './widgets/new_transactions.dart';
 import './Models/transaction.dart';
@@ -81,11 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList(); //where return an Iterable and we expect a list, hence we convert it
   }
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(String txTitle, double txAmount, DateTime txDate) {
     final newTrans = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: txDate,
       id: DateTime.now().toString() + txTitle.toString(),
     );
     setState(() {

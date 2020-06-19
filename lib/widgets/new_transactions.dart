@@ -19,16 +19,20 @@ class _NewTransactionState extends State<NewTransaction> {
       _selectedDate; //create a var of type Date to store the dates selected by the user
 
   void _submitData() {
+    // if (_amountContorller.text.isEmpty) {
+    //   return;
+    // }
     final enteredTitle = _tilteController.text;
     final enteredAmount = double.parse(_amountContorller.text);
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
       return; //if the condition is meet, the code won't continue to the folowing lines (ex addTransaction)
     }
     widget.addTransaction(
-      //widget is used in the state class to access the widget class
-      _tilteController.text,
-      double.parse(_amountContorller.text),
+      //widget is used in the state class to access the widget class, probably like a self, not sure
+      enteredTitle,
+      enteredAmount,
+      _selectedDate,
     );
 
     Navigator.of(context).pop(); //close the popup
@@ -90,7 +94,7 @@ class _NewTransactionState extends State<NewTransaction> {
               height: 70,
               child: Row(
                 children: <Widget>[
-                  Expanded(
+                  Expanded( //text wrapped in expanded alows it to take all the space available, and the button will take the space it needs (btn not in expanded)
                     child: Text(
                       _selectedDate == null
                           ? "No date chosen"
