@@ -123,8 +123,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     final isLandskape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+        mediaQuery.orientation == Orientation.landscape;
     final appBar = AppBar(
       //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
       centerTitle: true,
@@ -144,9 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final transactionsListWidget = Container(
-      height: (MediaQuery.of(context).size.height -
+      height: (mediaQuery.size.height -
           appBar.preferredSize.height -
-          MediaQuery.of(context).padding.top),
+          mediaQuery.padding.top),
       child: TransactionList(
         _userTransactions,
         _deleteTransaction,
@@ -183,9 +184,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (!isLandskape)
               Container(
-                height: (MediaQuery.of(context).size.height -
+                height: (mediaQuery.size.height -
                         appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
+                        mediaQuery.padding.top) *
                     0.3, //padding is kind of a safe area
                 child: Chart(_recentTransactions),
               ),
@@ -193,9 +194,9 @@ class _MyHomePageState extends State<MyHomePage> {
             if (isLandskape)
                _showChart
                   ? Container(
-                      height: (MediaQuery.of(context).size.height -
+                      height: (mediaQuery.size.height -
                               appBar.preferredSize.height -
-                              MediaQuery.of(context).padding.top) *
+                              mediaQuery.padding.top) *
                           0.7, //padding is kind of a safe area
                       child: Chart(_recentTransactions),
                     )

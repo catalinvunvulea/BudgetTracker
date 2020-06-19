@@ -61,7 +61,7 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return SingleChildScrollView( //we used this widget to enable the scroll when the keyboard is showing
           child: Card(
         elevation: 5,
         child: Container(
