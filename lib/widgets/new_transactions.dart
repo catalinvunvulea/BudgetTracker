@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; //alowes us to format the date
 
@@ -108,7 +111,11 @@ class _NewTransactionState extends State<NewTransaction> {
                             : "Picked date: ${DateFormat.yMMMMd().format(_selectedDate)}",
                       ),
                     ),
-                    FlatButton(
+                    Platform.isIOS ? CupertinoButton(child: Text(
+                        _selectedDate == null ? "Chose date" : "Change date",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: _presentDatePicker,) : FlatButton(
                       child: Text(
                         _selectedDate == null ? "Chose date" : "Change date",
                         style: TextStyle(fontWeight: FontWeight.bold),
