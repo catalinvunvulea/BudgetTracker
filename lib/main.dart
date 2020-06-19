@@ -173,53 +173,55 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    final pageView = SingleChildScrollView(
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (isLandskape)
-            Row(
-              //this is a special if inside of a List, hence we don't have to use {}
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text("Show chart"),
-                    Switch.adaptive(
-                      //using .adaptive, the switch will have a different look for the iOS
-                      activeColor: Theme.of(context).primaryColor,
-                      value: _showChart,
-                      onChanged: (value) {
-                        setState(() {
-                          _showChart = value;
-                        });
-                      },
-                    )
-                  ],
-                )
-              ],
-            ),
-          if (!isLandskape)
-            Container(
-              height: (mediaQuery.size.height -
-                      appBar.preferredSize.height -
-                      mediaQuery.padding.top) *
-                  0.3, //padding is kind of a safe area
-              child: Chart(_recentTransactions),
-            ),
-          if (!isLandskape) transactionsListWidget,
-          if (isLandskape)
-            _showChart
-                ? Container(
-                    height: (mediaQuery.size.height -
-                            appBar.preferredSize.height -
-                            mediaQuery.padding.top) *
-                        0.7, //padding is kind of a safe area
-                    child: Chart(_recentTransactions),
+    final pageView = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            if (isLandskape)
+              Row(
+                //this is a special if inside of a List, hence we don't have to use {}
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text("Show chart"),
+                      Switch.adaptive(
+                        //using .adaptive, the switch will have a different look for the iOS
+                        activeColor: Theme.of(context).primaryColor,
+                        value: _showChart,
+                        onChanged: (value) {
+                          setState(() {
+                            _showChart = value;
+                          });
+                        },
+                      )
+                    ],
                   )
-                : transactionsListWidget,
-        ],
+                ],
+              ),
+            if (!isLandskape)
+              Container(
+                height: (mediaQuery.size.height -
+                        appBar.preferredSize.height -
+                        mediaQuery.padding.top) *
+                    0.3, //padding is kind of a safe area
+                child: Chart(_recentTransactions),
+              ),
+            if (!isLandskape) transactionsListWidget,
+            if (isLandskape)
+              _showChart
+                  ? Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.7, //padding is kind of a safe area
+                      child: Chart(_recentTransactions),
+                    )
+                  : transactionsListWidget,
+          ],
+        ),
       ),
     );
     return Platform.isIOS
