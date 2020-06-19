@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:BudgetTracker/widgets/chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import './widgets/new_transactions.dart';
@@ -10,6 +11,10 @@ import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
 
 void main() {
+  WidgetsFlutterBinding
+      .ensureInitialized(); //if this func is not called, on some devices orientation won't work as requsted below
+  SystemChrome.setPreferredOrientations(//used to set the device orentations
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
@@ -143,7 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
                 height: (MediaQuery.of(context).size.height -
                         appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) * //padding is kind of a safe area
+                        MediaQuery.of(context)
+                            .padding
+                            .top) * //padding is kind of a safe area
                     0.3,
                 child: Chart(_recentTransactions)),
             Container(
