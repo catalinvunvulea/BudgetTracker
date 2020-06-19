@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:BudgetTracker/widgets/chart.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import './widgets/new_transactions.dart';
@@ -123,23 +125,43 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final isLandskape = mediaQuery.orientation == Orientation.landscape;
-    final appBar = AppBar(
-      //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
-      centerTitle: true,
-      title: Text(
-        "My Budget",
-        style: TextStyle(
-          fontFamily: 'Open Sans',
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.add, color: Colors.white),
-          onPressed: () => _startAddNewTransaction(context),
-        ),
-      ],
-    );
+    final PreferredSizeWidget appBar = Platform
+            .isIOS //we need to state this is a PreferredSizeWidget otherwise it won't reconignise the sizez when we have to calulcate them
+        ? CupertinoNavigationBar(
+            middle: Text(
+              "My Budget",
+              style: TextStyle(
+                fontFamily: 'Open Sans',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _startAddNewTransaction(context),
+                )
+              ],
+            ),
+          )
+        : AppBar(
+            //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
+            centerTitle: true,
+            title: Text(
+              "My Budget",
+              style: TextStyle(
+                fontFamily: 'Open Sans',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.add, color: Colors.white),
+                onPressed: () => _startAddNewTransaction(context),
+              ),
+            ],
+          );
 
     final transactionsListWidget = Container(
       height: (mediaQuery.size.height -
@@ -151,64 +173,72 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            if (isLandskape)
-              Row(
-                //this is a special if inside of a List, hence we don't have to use {}
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text("Show chart"),
-                      Switch.adaptive(
-                        //using .adaptive, the switch will have a different look for the iOS
-                        activeColor: Theme.of(context).primaryColor,
-                        value: _showChart,
-                        onChanged: (value) {
-                          setState(() {
-                            _showChart = value;
-                          });
-                        },
-                      )
-                    ],
-                  )
-                ],
-              ),
-            if (!isLandskape)
-              Container(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3, //padding is kind of a safe area
-                child: Chart(_recentTransactions),
-              ),
-            if (!isLandskape) transactionsListWidget,
-            if (isLandskape)
-              _showChart
-                  ? Container(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7, //padding is kind of a safe area
-                      child: Chart(_recentTransactions),
+    final pageView = SingleChildScrollView(
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          if (isLandskape)
+            Row(
+              //this is a special if inside of a List, hence we don't have to use {}
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Text("Show chart"),
+                    Switch.adaptive(
+                      //using .adaptive, the switch will have a different look for the iOS
+                      activeColor: Theme.of(context).primaryColor,
+                      value: _showChart,
+                      onChanged: (value) {
+                        setState(() {
+                          _showChart = value;
+                        });
+                      },
                     )
-                  : transactionsListWidget,
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Platform.isIOS //Platform.isIOS checks if app runs on IOS
-          ? Container() // if it does, we return an emty container as we don't wish to show the button
-          : FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _startAddNewTransaction(context),
+                  ],
+                )
+              ],
+            ),
+          if (!isLandskape)
+            Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.3, //padding is kind of a safe area
+              child: Chart(_recentTransactions),
+            ),
+          if (!isLandskape) transactionsListWidget,
+          if (isLandskape)
+            _showChart
+                ? Container(
+                    height: (mediaQuery.size.height -
+                            appBar.preferredSize.height -
+                            mediaQuery.padding.top) *
+                        0.7, //padding is kind of a safe area
+                    child: Chart(_recentTransactions),
+                  )
+                : transactionsListWidget,
+        ],
       ),
     );
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageView,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: pageView,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform
+                    .isIOS //Platform.isIOS checks if app runs on IOS
+                ? Container() // if it does, we return an emty container as we don't wish to show the button
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _startAddNewTransaction(context),
+                  ),
+          );
   }
 }
