@@ -53,7 +53,7 @@ class TransactionList extends StatelessWidget {
                     subtitle: Text(
                       DateFormat.yMMMEd().format(transactions[index].date),
                     ),
-                    trailing: MediaQuery.of(context).size.width > 460
+                    trailing: MediaQuery.of(context).size.width > 460 //if the device is widher than 460, we will show additional info 
                         ? FlatButton.icon(
                             label: Text(
                               "Delete"

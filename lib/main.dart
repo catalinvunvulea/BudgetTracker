@@ -1,9 +1,7 @@
-import 'dart:math';
+import 'dart:io';
 
 import 'package:BudgetTracker/widgets/chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 import './widgets/new_transactions.dart';
 import './Models/transaction.dart';
@@ -124,8 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final isLandskape =
-        mediaQuery.orientation == Orientation.landscape;
+    final isLandskape = mediaQuery.orientation == Orientation.landscape;
     final appBar = AppBar(
       //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
       centerTitle: true,
@@ -169,7 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Column(
                     children: <Widget>[
                       Text("Show chart"),
-                      Switch(
+                      Switch.adaptive(
+                        //using .adaptive, the switch will have a different look for the iOS
                         activeColor: Theme.of(context).primaryColor,
                         value: _showChart,
                         onChanged: (value) {
@@ -192,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (!isLandskape) transactionsListWidget,
             if (isLandskape)
-               _showChart
+              _showChart
                   ? Container(
                       height: (mediaQuery.size.height -
                               appBar.preferredSize.height -
@@ -205,7 +203,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Platform.isIOS //Platform.isIOS checks if app runs on IOS
+          ? Container() // if it does, we return an emty container as we don't wish to show the button
+          : FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
       ),
