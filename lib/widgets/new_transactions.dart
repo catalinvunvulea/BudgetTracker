@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; //alowes us to format the date
 
 class NewTransaction extends StatefulWidget {
   // const NewTransaction({Key key}) : super(key: key);
@@ -12,24 +13,46 @@ class NewTransaction extends StatefulWidget {
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final tilteController = TextEditingController();
+  final _tilteController = TextEditingController();
+  final _amountContorller = TextEditingController();
+  DateTime
+      _selectedDate; //create a var of type Date to store the dates selected by the user
 
-  final amountContorller = TextEditingController();
-
-  void submitData() {
-    final enteredTitle = tilteController.text;
-    final enteredAmount = double.parse(amountContorller.text);
+  void _submitData() {
+    final enteredTitle = _tilteController.text;
+    final enteredAmount = double.parse(_amountContorller.text);
 
     if (enteredTitle.isEmpty || enteredAmount <= 0) {
       return; //if the condition is meet, the code won't continue to the folowing lines (ex addTransaction)
     }
     widget.addTransaction(
       //widget is used in the state class to access the widget class
-      tilteController.text,
-      double.parse(amountContorller.text),
+      _tilteController.text,
+      double.parse(_amountContorller.text),
     );
 
     Navigator.of(context).pop(); //close the popup
+  }
+
+  void _presentDatePicker() {
+    showDatePicker(
+      //wiget built by flutter to show datePicker
+      context: context, //we pass in the context from the class
+      initialDate:
+          DateTime.now(), //odate to show as selected when open the date picker
+      firstDate: DateTime(2020), // oldest date available (Jan 20202)
+      lastDate: DateTime.now(), // latest date available
+    ).then((pickedDate) {
+      //then alows us to run a function once the user chose a date
+      if (pickedDate == null) {
+        return;
+      } else {
+        setState(() {
+          //tell flutter that a statefull widget updated and needs to update the screen
+          _selectedDate = pickedDate;
+        });
+      }
+    });
   }
 
   @override
@@ -43,9 +66,9 @@ class _NewTransactionState extends State<NewTransaction> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(labelText: "Title..."),
-              controller: tilteController,
+              controller: _tilteController,
               onSubmitted: (_) =>
-                  submitData(), //on submited=when ok from keyboard is pressed; we need to pass a function with string parameter, hence we use (_)
+                  _submitData(), //on submited=when ok from keyboard is pressed; we need to pass a function with string parameter, hence we use (_)
               // onChanged: (textAdded) {
               //textAdded = text added in the text field
               //  tilteController.text = textAdded;
@@ -57,35 +80,39 @@ class _NewTransactionState extends State<NewTransaction> {
                 labelStyle: TextStyle(color: Colors.grey),
               ),
               controller:
-                  amountContorller, //use controller or onChange and create a func
+                  _amountContorller, //use controller or onChange and create a func
               keyboardType: TextInputType.numberWithOptions(
                   decimal:
                       true), //TextInput.number would probably work only for Android
-              onSubmitted: (_) => submitData(),
+              onSubmitted: (_) => _submitData(),
             ),
             Container(
               height: 70,
               child: Row(
                 children: <Widget>[
-                  Text("No date chosen"),
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                          ? "No date chosen"
+                          : "Picked date: ${DateFormat.yMMMMd().format(_selectedDate)}",
+                    ),
+                  ),
                   FlatButton(
                     child: Text(
-                      "Chose date",
+                      _selectedDate == null ? "Chose date" : "Change date",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     textColor: Theme.of(context).primaryColor,
-                    onPressed: () {},
+                    onPressed: _presentDatePicker,
                   )
                 ],
               ),
             ),
             RaisedButton(
-              child: Text(
-                "Add transaction",
-              ),
+              child: Text("Add transaction"),
               color: Theme.of(context).primaryColor,
               textColor: Theme.of(context).textTheme.button.color,
-              onPressed: submitData,
+              onPressed: _submitData,
             ),
           ],
         ),
