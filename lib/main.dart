@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:BudgetTracker/widgets/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors
             .purple, //used to set a theme color that can be used throughout the App
         accentColor: Colors.amberAccent, //showing to some of the widgets
+        errorColor: Colors.red[400],
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
               headline6: TextStyle(
@@ -29,10 +32,8 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
-              button: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-              ),
+              button:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
@@ -87,10 +88,21 @@ class _MyHomePageState extends State<MyHomePage> {
       title: txTitle,
       amount: txAmount,
       date: txDate,
-      id: DateTime.now().toString() + txTitle.toString(),
+      id: DateTime.now().toString() + txTitle.toString() + txAmount.toString(),
     );
     setState(() {
       _userTransactions.add(newTrans);
+    });
+  }
+
+  void _deleteTransaction(String idToDelete) {
+    setState(() {
+      //to reload the screen once the transaction is removed
+      _userTransactions.removeWhere((element) {
+        //removeWhere will run a loop in the list and remove the element we ask him to
+        return element.id ==
+            idToDelete; // it has to return a bool, so once the condition is true, it will remove the elment
+      });
     });
   }
 
@@ -128,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Chart(_recentTransactions),
           TransactionList(
             _userTransactions,
+            _deleteTransaction,
           ),
         ],
       ),
