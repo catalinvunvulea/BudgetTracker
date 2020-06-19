@@ -11,10 +11,10 @@ import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
 
 void main() {
-  WidgetsFlutterBinding
-      .ensureInitialized(); //if this func is not called, on some devices orientation won't work as requsted below
-  SystemChrome.setPreferredOrientations(//used to set the device orentations
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+//  WidgetsFlutterBinding //commented as we will show the app in all orientations style
+  //     .ensureInitialized(); //if this func is not called, on some devices orientation won't work as requsted below
+  // SystemChrome.setPreferredOrientations(//used to set the device orentations
+  //    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Budget App',
       theme: ThemeData(
         primarySwatch: Colors
             .purple, //used to set a theme color that can be used throughout the App
@@ -79,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // )
   ];
 
+  bool _showChart = false;
+
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((element) {
       //.where can be used to lists(arrays) to return only the elemnts which we want; just like  for in loop
@@ -121,6 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandskape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
       centerTitle: true,
@@ -138,6 +142,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+
+    final transactionsListWidget = Container(
+      height: (MediaQuery.of(context).size.height -
+          appBar.preferredSize.height -
+          MediaQuery.of(context).padding.top),
+      child: TransactionList(
+        _userTransactions,
+        _deleteTransaction,
+      ),
+    );
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -145,24 +160,46 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
+            if (isLandskape)
+              Row(
+                //this is a special if inside of a List, hence we don't have to use {}
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text(_showChart ? "Show list" : "Show chart"),
+                      Switch(
+                        activeColor: Theme.of(context).primaryColor,
+                        value: _showChart,
+                        onChanged: (value) {
+                          setState(() {
+                            _showChart = value;
+                          });
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+            if (!isLandskape)
+              Container(
                 height: (MediaQuery.of(context).size.height -
                         appBar.preferredSize.height -
-                        MediaQuery.of(context)
-                            .padding
-                            .top) * //padding is kind of a safe area
-                    0.3,
-                child: Chart(_recentTransactions)),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.7,
-              child: TransactionList(
-                _userTransactions,
-                _deleteTransaction,
+                        MediaQuery.of(context).padding.top) *
+                    0.3, //padding is kind of a safe area
+                child: Chart(_recentTransactions),
               ),
-            ),
+            if (!isLandskape) transactionsListWidget,
+            if (isLandskape)
+              _showChart
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.7, //padding is kind of a safe area
+                      child: Chart(_recentTransactions),
+                    )
+                  : transactionsListWidget,
           ],
         ),
       ),

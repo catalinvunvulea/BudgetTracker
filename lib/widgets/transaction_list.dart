@@ -14,7 +14,8 @@ class TransactionList extends StatelessWidget {
     return Container(
        
       child: transactions.isEmpty
-          ? Column(
+          ? LayoutBuilder(builder: (context, constraints) {
+            return Column(
               children: <Widget>[
                 Text(
                   "You don't have a transaction!",
@@ -22,13 +23,14 @@ class TransactionList extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Container(
-                    height: 200,
+                    height: constraints.maxHeight * 0.6 ,
                     child: Image.asset(
                       'assets/images/waiting.png',
                       fit: BoxFit.cover,
                     ))
               ],
-            )
+            );
+          }) 
           : ListView.builder(
               //used for long lists (or if no of rows/columns is unknown; always has to have itemBuilder - elemtns included, and itemCount = number of rows/columns)
               itemBuilder: (ctx, index) {
