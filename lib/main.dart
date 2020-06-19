@@ -116,33 +116,48 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "My Budget",
-          style: TextStyle(
-            fontFamily: 'Open Sans',
-            fontWeight: FontWeight.bold,
-          ),
+    final appBar = AppBar(
+      //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
+      centerTitle: true,
+      title: Text(
+        "My Budget",
+        style: TextStyle(
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.bold,
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () => _startAddNewTransaction(context),
-          ),
-        ],
       ),
-      body: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Chart(_recentTransactions),
-          TransactionList(
-            _userTransactions,
-            _deleteTransaction,
-          ),
-        ],
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add, color: Colors.white),
+          onPressed: () => _startAddNewTransaction(context),
+        ),
+      ],
+    );
+    return Scaffold(
+      appBar: appBar,
+      body: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) * //padding is kind of a safe area
+                    0.3,
+                child: Chart(_recentTransactions)),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.7,
+              child: TransactionList(
+                _userTransactions,
+                _deleteTransaction,
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(

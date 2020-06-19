@@ -19,9 +19,9 @@ class _NewTransactionState extends State<NewTransaction> {
       _selectedDate; //create a var of type Date to store the dates selected by the user
 
   void _submitData() {
-    // if (_amountContorller.text.isEmpty) {
-    //   return;
-    // }
+    if (_amountContorller.text.isEmpty) {
+      return;
+    }
     final enteredTitle = _tilteController.text;
     final enteredAmount = double.parse(_amountContorller.text);
 
