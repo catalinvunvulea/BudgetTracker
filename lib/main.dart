@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   Column(
                     children: <Widget>[
-                      Text("Show chart"),
+                      Text("Show chart", style: Theme.of(context).textTheme.headline6),
                       Switch.adaptive(
                         //using .adaptive, the switch will have a different look for the iOS
                         activeColor: Theme.of(context).primaryColor,
