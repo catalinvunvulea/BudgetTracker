@@ -167,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   Column(
                     children: <Widget>[
-                      Text(_showChart ? "Show list" : "Show chart"),
+                      Text("Show chart"),
                       Switch(
                         activeColor: Theme.of(context).primaryColor,
                         value: _showChart,
@@ -191,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (!isLandskape) transactionsListWidget,
             if (isLandskape)
-              _showChart
+               _showChart
                   ? Container(
                       height: (MediaQuery.of(context).size.height -
                               appBar.preferredSize.height -

@@ -61,64 +61,72 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(labelText: "Title..."),
-              controller: _tilteController,
-              onSubmitted: (_) =>
-                  _submitData(), //on submited=when ok from keyboard is pressed; we need to pass a function with string parameter, hence we use (_)
-              // onChanged: (textAdded) {
-              //textAdded = text added in the text field
-              //  tilteController.text = textAdded;
-              // },
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Value...",
-                labelStyle: TextStyle(color: Colors.grey),
+    return SingleChildScrollView(
+          child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10, //gives us acces to everithing laping into our view
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: "Title..."),
+                controller: _tilteController,
+                onSubmitted: (_) =>
+                    _submitData(), //on submited=when ok from keyboard is pressed; we need to pass a function with string parameter, hence we use (_)
+                // onChanged: (textAdded) {
+                //textAdded = text added in the text field
+                //  tilteController.text = textAdded;
+                // },
               ),
-              controller:
-                  _amountContorller, //use controller or onChange and create a func
-              keyboardType: TextInputType.numberWithOptions(
-                  decimal:
-                      true), //TextInput.number would probably work only for Android
-              onSubmitted: (_) => _submitData(),
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                  Expanded( //text wrapped in expanded alows it to take all the space available, and the button will take the space it needs (btn not in expanded)
-                    child: Text(
-                      _selectedDate == null
-                          ? "No date chosen"
-                          : "Picked date: ${DateFormat.yMMMMd().format(_selectedDate)}",
-                    ),
-                  ),
-                  FlatButton(
-                    child: Text(
-                      _selectedDate == null ? "Chose date" : "Change date",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    textColor: Theme.of(context).primaryColor,
-                    onPressed: _presentDatePicker,
-                  )
-                ],
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Value...",
+                  labelStyle: TextStyle(color: Colors.grey),
+                ),
+                controller:
+                    _amountContorller, //use controller or onChange and create a func
+                keyboardType: TextInputType.numberWithOptions(
+                    decimal:
+                        true), //TextInput.number would probably work only for Android
+                onSubmitted: (_) => _submitData(),
               ),
-            ),
-            RaisedButton(
-              child: Text("Add transaction"),
-              color: Theme.of(context).primaryColor,
-              textColor: Theme.of(context).textTheme.button.color,
-              onPressed: _submitData,
-            ),
-          ],
+              Container(
+                height: 70,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      //text wrapped in expanded alows it to take all the space available, and the button will take the space it needs (btn not in expanded)
+                      child: Text(
+                        _selectedDate == null
+                            ? "No date chosen"
+                            : "Picked date: ${DateFormat.yMMMMd().format(_selectedDate)}",
+                      ),
+                    ),
+                    FlatButton(
+                      child: Text(
+                        _selectedDate == null ? "Chose date" : "Change date",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      textColor: Theme.of(context).primaryColor,
+                      onPressed: _presentDatePicker,
+                    )
+                  ],
+                ),
+              ),
+              RaisedButton(
+                child: Text("Add transaction"),
+                color: Theme.of(context).primaryColor,
+                textColor: Theme.of(context).textTheme.button.color,
+                onPressed: _submitData,
+              ),
+            ],
+          ),
         ),
       ),
     );
