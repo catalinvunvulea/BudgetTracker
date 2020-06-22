@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../widgets/adaptive_flat_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; //alowes us to format the date
@@ -64,15 +65,17 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( //we used this widget to enable the scroll when the keyboard is showing
-          child: Card(
+    return SingleChildScrollView(
+      //we used this widget to enable the scroll when the keyboard is showing
+      child: Card(
         elevation: 5,
         child: Container(
           padding: EdgeInsets.only(
             top: 10,
             left: 10,
             right: 10,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10, //gives us acces to everithing laping into our view
+            bottom: MediaQuery.of(context).viewInsets.bottom +
+                10, //gives us acces to everithing laping into our view
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -111,18 +114,7 @@ class _NewTransactionState extends State<NewTransaction> {
                             : "Picked date: ${DateFormat.yMMMMd().format(_selectedDate)}",
                       ),
                     ),
-                    Platform.isIOS ? CupertinoButton(child: Text(
-                        _selectedDate == null ? "Chose date" : "Change date",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: _presentDatePicker,) : FlatButton(
-                      child: Text(
-                        _selectedDate == null ? "Chose date" : "Change date",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      textColor: Theme.of(context).primaryColor,
-                      onPressed: _presentDatePicker,
-                    )
+                    AdaptiveFlatButton("Choose date", _presentDatePicker)
                   ],
                 ),
               ),
