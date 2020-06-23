@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:BudgetTracker/widgets/chart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import './widgets/new_transactions.dart';
@@ -166,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final transactionsListWidget = Container(
       height: (mediaQuery.size.height -
           appBar.preferredSize.height -
-          mediaQuery.padding.top),
+          mediaQuery.padding.top) * 0.7,
       child: TransactionList(
         _userTransactions,
         _deleteTransaction,
@@ -174,7 +173,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final pageView = SafeArea(
-      child: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -186,7 +184,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   Column(
                     children: <Widget>[
-                      Text("Show chart", style: Theme.of(context).textTheme.headline6),
+                      Text("Show chart",
+                          style: Theme.of(context).textTheme.headline6),
                       Switch.adaptive(
                         //using .adaptive, the switch will have a different look for the iOS
                         activeColor: Theme.of(context).primaryColor,
@@ -216,13 +215,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: (mediaQuery.size.height -
                               appBar.preferredSize.height -
                               mediaQuery.padding.top) *
-                          0.7, //padding is kind of a safe area
+                          0.6, //padding is kind of a safe area
                       child: Chart(_recentTransactions),
                     )
                   : transactionsListWidget,
           ],
         ),
-      ),
+    
     );
     return Platform.isIOS
         ? CupertinoPageScaffold(
