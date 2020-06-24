@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:BudgetTracker/widgets/chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -120,6 +119,56 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  List<Widget> _buildLandscapeContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget transactionsListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Text("Show chart", style: Theme.of(context).textTheme.headline6),
+              Switch.adaptive(
+                //using .adaptive, the switch will have a different look for the iOS
+                activeColor: Theme.of(context).primaryColor,
+                value: _showChart,
+                onChanged: (value) {
+                  setState(() {
+                    _showChart = value;
+                  });
+                },
+              )
+            ],
+          )
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.6, //padding is kind of a safe area
+              child: Chart(_recentTransactions),
+            )
+          : transactionsListWidget,
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget transactionsListWidget) {
+    //return a list of widgets
+    return [
+      Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3, //padding is kind of a safe area
+        child: Chart(_recentTransactions),
+      ),
+      transactionsListWidget
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -127,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final PreferredSizeWidget appBar = Platform
             .isIOS //we need to state this is a PreferredSizeWidget otherwise it won't reconignise the sizez when we have to calulcate them
         ? CupertinoNavigationBar(
-            middle: Text(
+            middle: const Text(
               "My Budget",
               style: TextStyle(
                 fontFamily: 'Open Sans',
@@ -147,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
         : AppBar(
             //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
             centerTitle: true,
-            title: Text(
+            title: const Text(
               "My Budget",
               style: TextStyle(
                 fontFamily: 'Open Sans',
@@ -164,8 +213,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final transactionsListWidget = Container(
       height: (mediaQuery.size.height -
-          appBar.preferredSize.height -
-          mediaQuery.padding.top) * 0.7,
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
       child: TransactionList(
         _userTransactions,
         _deleteTransaction,
@@ -173,55 +223,24 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final pageView = SafeArea(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            if (isLandskape)
-              Row(
-                //this is a special if inside of a List, hence we don't have to use {}
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text("Show chart",
-                          style: Theme.of(context).textTheme.headline6),
-                      Switch.adaptive(
-                        //using .adaptive, the switch will have a different look for the iOS
-                        activeColor: Theme.of(context).primaryColor,
-                        value: _showChart,
-                        onChanged: (value) {
-                          setState(() {
-                            _showChart = value;
-                          });
-                        },
-                      )
-                    ],
-                  )
-                ],
-              ),
-            if (!isLandskape)
-              Container(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3, //padding is kind of a safe area
-                child: Chart(_recentTransactions),
-              ),
-            if (!isLandskape) transactionsListWidget,
-            if (isLandskape)
-              _showChart
-                  ? Container(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.6, //padding is kind of a safe area
-                      child: Chart(_recentTransactions),
-                    )
-                  : transactionsListWidget,
-          ],
-        ),
-    
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          if (isLandskape)
+            ..._buildLandscapeContent( //Column-children expect a list of widgets, but not additional lists of widgets; _buildPortraitCOntent is a list of widgets, hence we use ...(called the spread operator) to pull out the list from_buildPortraitContent and add each element as a single widget   in the main list (Column-widgets)
+              mediaQuery,
+              appBar,
+              transactionsListWidget,
+            ),
+          if (!isLandskape)
+            ..._buildPortraitContent(
+              mediaQuery,
+              appBar,
+              transactionsListWidget,
+            ), 
+        ],
+      ),
     );
     return Platform.isIOS
         ? CupertinoPageScaffold(
