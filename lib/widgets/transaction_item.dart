@@ -1,9 +1,12 @@
+import 'dart:math'; //use func such as Random
+
 import 'package:flutter/material.dart';
-import '../Models/transaction.dart';
 import 'package:intl/intl.dart'; //alowes us to format the date
 
 
-class TransactionItem extends StatelessWidget {
+import '../Models/transaction.dart';
+
+class TransactionItem extends StatefulWidget {
   const TransactionItem({
     Key key,
     @required this.transaction,
@@ -14,26 +17,48 @@ class TransactionItem extends StatelessWidget {
   final Function deleteTransaction;
 
   @override
+  _TransactionItemState createState() => _TransactionItemState();
+}
+
+class _TransactionItemState extends State<TransactionItem> {
+
+Color _bgColor;
+
+  @override
+  void initState() {
+    super.initState();
+   const availableColors = [
+     Colors.black,
+     Colors.blue,
+     Colors.purple,
+     Colors.pink,
+   ];
+_bgColor = availableColors[Random().nextInt(availableColors.length)]; //nextInt is the max no, always start with 0 and does not count the last one (ex, if I add , it will take from 0 to 3)
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
       margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
       child: ListTile(
         leading: CircleAvatar(
+          backgroundColor: _bgColor,
           radius: 30,
           child: Padding(
             padding: EdgeInsets.all(6),
             child: FittedBox(
-              child: Text("£ ${transaction.amount}"),
+              child: Text("£ ${widget.transaction.amount}"),
             ),
           ),
         ),
         title: Text(
-          "${transaction.title}",
+          "${widget.transaction.title}",
           style: Theme.of(context).textTheme.headline6,
         ),
         subtitle: Text(
-          DateFormat.yMMMEd().format(transaction.date),
+          DateFormat.yMMMEd().format(widget.transaction.date),
         ),
         trailing: MediaQuery.of(context).size.width > 460 //if the device is widher than 460, we will show additional info 
             ? FlatButton.icon(
@@ -45,7 +70,7 @@ class TransactionItem extends StatelessWidget {
                 ),
                 textColor: Theme.of(context).errorColor,
                 onPressed: () =>
-                    deleteTransaction(transaction.id),
+                    widget.deleteTransaction(widget.transaction.id),
               )
             : IconButton(
                 icon: Icon(
@@ -53,7 +78,7 @@ class TransactionItem extends StatelessWidget {
                   color: Theme.of(context).errorColor,
                 ),
                 onPressed: () =>
-                    deleteTransaction(transaction.id),
+                    widget.deleteTransaction(widget.transaction.id),
               ),
       ),
     );
