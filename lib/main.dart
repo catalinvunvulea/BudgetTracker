@@ -169,47 +169,89 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
+  PreferredSizeWidget _cupertinoNavigationBar() {
+    return CupertinoNavigationBar(
+      middle: const Text(
+        "My Budget",
+        style: TextStyle(
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            child: Icon(CupertinoIcons.add),
+            onTap: () => _startAddNewTransaction(context),
+          )
+        ],
+      ),
+    );
+  }
+
+  PreferredSizeWidget _androidNavigationBar() {
+    AppBar(
+      //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
+      centerTitle: true,
+      title: const Text(
+        "My Budget",
+        style: TextStyle(
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add, color: Colors.white),
+          onPressed: () => _startAddNewTransaction(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAppBar() {
+    return Platform.isIOS ? CupertinoNavigationBar(
+      middle: const Text(
+        "My Budget",
+        style: TextStyle(
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            child: Icon(CupertinoIcons.add),
+            onTap: () => _startAddNewTransaction(context),
+          )
+        ],
+      ),
+    ) : AppBar(
+      //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
+      centerTitle: true,
+      title: const Text(
+        "My Budget",
+        style: TextStyle(
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add, color: Colors.white),
+          onPressed: () => _startAddNewTransaction(context),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final isLandskape = mediaQuery.orientation == Orientation.landscape;
-    final PreferredSizeWidget appBar = Platform
-            .isIOS //we need to state this is a PreferredSizeWidget otherwise it won't reconignise the sizez when we have to calulcate them
-        ? CupertinoNavigationBar(
-            middle: const Text(
-              "My Budget",
-              style: TextStyle(
-                fontFamily: 'Open Sans',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                GestureDetector(
-                  child: Icon(CupertinoIcons.add),
-                  onTap: () => _startAddNewTransaction(context),
-                )
-              ],
-            ),
-          )
-        : AppBar(
-            //appBar is added in a constant so the size can be accessed and used when creatin dynamic sizes
-            centerTitle: true,
-            title: const Text(
-              "My Budget",
-              style: TextStyle(
-                fontFamily: 'Open Sans',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add, color: Colors.white),
-                onPressed: () => _startAddNewTransaction(context),
-              ),
-            ],
-          );
+    final PreferredSizeWidget appBar = _buildAppBar();
 
     final transactionsListWidget = Container(
       height: (mediaQuery.size.height -
@@ -228,7 +270,8 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           if (isLandskape)
-            ..._buildLandscapeContent( //Column-children expect a list of widgets, but not additional lists of widgets; _buildPortraitCOntent is a list of widgets, hence we use ...(called the spread operator) to pull out the list from_buildPortraitContent and add each element as a single widget   in the main list (Column-widgets)
+            ..._buildLandscapeContent(
+              //Column-children expect a list of widgets, but not additional lists of widgets; _buildPortraitCOntent is a list of widgets, hence we use ...(called the spread operator) to pull out the list from_buildPortraitContent and add each element as a single widget   in the main list (Column-widgets)
               mediaQuery,
               appBar,
               transactionsListWidget,
@@ -238,7 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mediaQuery,
               appBar,
               transactionsListWidget,
-            ), 
+            ),
         ],
       ),
     );
